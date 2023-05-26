@@ -11,6 +11,10 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v3
+      - name: Environment
+        run: |
+          echo "GHCR_USER=${{ github.actor }}" >> $GITHUB_ENV
+          echo "GHCR_TOKEN=${{ secrets.GITHUB_TOKEN }}" >> $GITHUB_ENV
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v2
       - name: Set up Docker Buildx
@@ -21,15 +25,23 @@ jobs:
           registry: ghcr.io
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
-      - name: Build w/Container
-        uses: devcontainers/ci@v0.2
+      - name: Build (amd64)
+        uses: devcontainers/ci@v0.3
         with:
           push: never
+          imageName: live-development-amd64
+          platform: linux/amd64
           runCmd: ./bin/build
-      - name: Package
-        uses: docker/build-push-action@v3
+      - name: Package (amd64)
+        run: ./bin/package-platform amd64
+      - name: Build (arm64)
+        uses: devcontainers/ci@v0.3
         with:
-          context: .
-          platforms: linux/amd64,linux/arm64/v8
-          push: true
-          tags: ghcr.io/rails-lambda/live-development:latest
+          push: never
+          imageName: live-development-arm64
+          platform: linux/arm64
+          runCmd: ./bin/build
+      - name: Package (arm64)
+        run: ./bin/package-platform arm64
+      - name: Package (manifest)
+        run: ./bin/package

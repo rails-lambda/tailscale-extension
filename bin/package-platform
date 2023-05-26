@@ -1,0 +1,14 @@
+#!/bin/sh
+set -e
+
+docker login ghcr.io -u $GHCR_USER -p $GHCR_TOKEN
+BASE_NAME="ghcr.io/rails-lambda/live-development"
+
+PLATFORM=$1
+
+docker build \
+  --platform "linux/${PLATFORM}" \
+  --tag "${BASE_NAME}-${PLATFORM}:latest" \
+  --file Dockerfile .
+
+docker push "${BASE_NAME}-${PLATFORM}:latest"
