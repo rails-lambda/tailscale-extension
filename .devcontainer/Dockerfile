@@ -1,4 +1,4 @@
-FROM public.ecr.aws/lambda/ruby:3.2
+FROM public.ecr.aws/lambda/provided
 RUN yum update -y
 
 # Install things to help install things.
