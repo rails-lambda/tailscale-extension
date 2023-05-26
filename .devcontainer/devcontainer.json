@@ -1,0 +1,12 @@
+{
+  "name": "live-development",
+  "build": {
+    "dockerfile": "Dockerfile",
+    "context": "."
+  },
+  "features": {
+    "ghcr.io/customink/codespaces-features/common-amzn": {},
+    "ghcr.io/customink/codespaces-features/docker-in-docker-amzn": {}
+  },
+  "remoteUser": "vscode"
+}
