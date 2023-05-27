@@ -5,8 +5,8 @@ rm -rf ./opt
 mkdir -p ./opt/bin \
          ./opt/layer/extensions
 
-sudo yum-config-manager --add-repo https://pkgs.tailscale.com/stable/amazon-linux/2/tailscale.repo
-sudo yum -y install tailscale
+yum-config-manager --add-repo https://pkgs.tailscale.com/stable/amazon-linux/2/tailscale.repo
+yum -y install tailscale
 
 cp ./src/live-development-proxy.sh ./opt/layer/extensions/live-development-proxy.sh
 

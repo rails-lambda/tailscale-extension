@@ -22,26 +22,9 @@ jobs:
           registry: ghcr.io
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
-      - name: Build Builder (amd64)
+      - name: Build & Push
         uses: docker/build-push-action@v4
         with:
-          builder: ${{ steps.builder.outputs.name }}
-          outputs: type=docker
-          context: ./.devcontainer
-          platforms: linux/amd64
-          tags: ghcr.io/rails-lambda/live-development-builder:amd64
-      - name: Build Builder (arm64)
-        uses: docker/build-push-action@v4
-        with:
-          builder: ${{ steps.builder.outputs.name }}
-          outputs: type=docker
-          context: ./.devcontainer
-          platforms: linux/arm64/v8
-          tags: ghcr.io/rails-lambda/live-development-builder:arm64
-      - name: Package
-        uses: docker/build-push-action@v4
-        with:
-          builder: ${{ steps.builder.outputs.name }}
           context: .
           platforms: linux/amd64,linux/arm64/v8
           push: true
