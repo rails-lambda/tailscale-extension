@@ -8,3 +8,4 @@ RUN yum groupinstall -y 'Development Tools' && \
 # Local devcontainer compatibility.
 ENTRYPOINT []
 RUN mkdir -p /workspaces/live-development
+WORKDIR /workspaces/live-development

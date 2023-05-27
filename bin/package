@@ -1,12 +1,19 @@
 #!/bin/sh
 set -e
 
-docker login ghcr.io -u $GHCR_USER -p $GHCR_TOKEN
 BASE_NAME="ghcr.io/rails-lambda/live-development"
 
+echo $GHCR_TOKEN | docker login ghcr.io --username $GHCR_USER --password-stdin
+
+docker images --format '{{.ID}}' lamby_benchmark_devcontainer_app
+
+
+
+echo 'Manifest create'
 docker manifest create \
   "${BASE_NAME}:latest" \
   --amend "${BASE_NAME}-amd64:latest" \
   --amend "${BASE_NAME}-arm64:latest"
 
-docker manifest push "${BASE_NAME}:latest"
+echo 'Manifest push'
+docker manifest push --insecure "${BASE_NAME}:latest"
