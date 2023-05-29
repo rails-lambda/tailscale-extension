@@ -1,6 +1,46 @@
 
 # Live Lambda Development | Tailscale Proxy
 
+## Architecture
+
+...
+
+```mermaid
+flowchart TB
+  %% Objects
+  usr[/User/]
+  subgraph aws["AWS Environment"]
+    fun(Function URL)
+		api(API Gateway)
+    lam(Lambda Proxy)
+    ddb[(DynamoDB)]:::node-org
+  end
+  subgraph local["Local Environment"]
+    subgraph app["Application"]
+      proxy(Proxy Server)
+    end
+  end
+  %% Flow
+  usr <--> |/*| fun
+  usr <--> |/cable| api
+  fun <--> lam
+  api --> lam
+  lam <--> |Tailscale| proxy
+  app --> api
+  app --> ddb
+  %% Styles
+  classDef node fill:#a99ff0,stroke:#fff,stroke-width:4px,color:#000;
+  classDef node-wht fill:white,stroke:#ccc,stroke-width:1px,color:black;
+  classDef node-org fill:#fdf3ea,stroke:#f7c296,stroke-width:2px,color:#000;
+  classDef desc fill:white,stroke:#ccc,stroke-width:1px,color:black,font-size:12px;
+  classDef node-sml font-size:13px,line-height:2em;
+  classDef fs13 font-size:13px,line-height:1em;
+	linkStyle 4 stroke:#f28add
+	linkStyle 5 stroke:#f28add
+	linkStyle 6 stroke:#f28add
+  class aws node-wht
+  class local node-wht
+```
 
 ## Installation
 
@@ -21,6 +61,7 @@ https://docs.aws.amazon.com/en_us/lambda/latest/dg/runtimes-walkthrough.html
 
 ## Usage
 
+...
 
 ### Local Services
 
