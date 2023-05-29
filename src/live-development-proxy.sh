@@ -3,7 +3,7 @@
 # SPDX-License-Identifier: MIT-0
 
 set -euo pipefail
-set -x
+set +x
 
 OWN_FILENAME="$(basename $0)"
 LAMBDA_EXTENSION_NAME="$OWN_FILENAME" # (external) extension name has to match the filename

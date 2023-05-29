@@ -46,6 +46,15 @@ flowchart TB
 
 TODO: Call out need for `curl` to be installed.
 
+
+```dockerfile
+FROM public.ecr.aws/lambda/nodejs:18
+RUN yum install -y curl
+COPY --from=ghcr.io/rails-lambda/live-development-extension:1 /opt /opt
+COPY src/app.mjs ${LAMBDA_TASK_ROOT}
+CMD ["app.lambdaHandler"]
+```
+
 ```dockerfile
 FROM public.ecr.aws/lambda/provided
 COPY --from=ghcr.io/rails-lambda/live-development /opt /opt
