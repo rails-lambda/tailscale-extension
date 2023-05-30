@@ -54,6 +54,7 @@ do
   if [[ $EVENT_DATA == *"SHUTDOWN"* ]]; then
     echo "[extension: ${LAMBDA_EXTENSION_NAME}] Received SHUTDOWN event. Exiting."  1>&2;
     # Cleanly shut down the Tailscale process
+    /opt/bin/tailscale --socket=/tmp/tailscale.sock down
     exit 0 # Exit if we receive a SHUTDOWN event
   fi
   echo "[${LAMBDA_EXTENSION_NAME}] Received event: ${EVENT_DATA}" 
