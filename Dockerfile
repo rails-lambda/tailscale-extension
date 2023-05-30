@@ -1,15 +1,14 @@
 FROM public.ecr.aws/lambda/provided as builder
-RUN yum update -y
-RUN yum groupinstall -y 'Development Tools' && \
-    yum install -y which binutils pkgconfig elfutils patchutils yum-utils
-ENTRYPOINT []
-RUN mkdir -p /workspaces/live-development
-WORKDIR /workspaces/live-development
+RUN yum update -y && \
+    yum install -y curl sudo
+RUN sudo curl -fsSL https://tailscale.com/install.sh | sh
 
-COPY . .
-RUN ./bin/build
+RUN mkdir -p ./opt/bin ./opt/extensions
+COPY ./src/live-development-proxy.sh /opt/extensions/live-development-proxy.sh
+RUN sudo cp /usr/bin/tailscale /opt/bin/tailscale
+RUN sudo cp /usr/sbin/tailscaled /opt/bin/tailscaled
 
 FROM scratch
 LABEL org.opencontainers.image.source "https://github.com/rails-lambda/live-development"
 LABEL org.opencontainers.image.description "Live Lambda Development | Tailscale Proxy"
-COPY --from=builder /workspaces/live-development/opt /opt
+COPY --from=builder /opt /opt
