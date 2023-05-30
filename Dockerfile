@@ -1,9 +1,10 @@
 FROM public.ecr.aws/lambda/provided as builder
 RUN yum update -y && \
-    yum install -y curl sudo
-RUN sudo curl -fsSL https://tailscale.com/install.sh | sh
+    yum install -y curl sudo yum-utils
+RUN sudo yum-config-manager --add-repo https://pkgs.tailscale.com/stable/amazon-linux/2/tailscale.repo && \
+    sudo yum install -y tailscale
 
-RUN mkdir -p ./opt/bin ./opt/extensions
+RUN mkdir -p /opt/bin /opt/extensions
 COPY ./src/live-development-proxy.sh /opt/extensions/live-development-proxy.sh
 RUN sudo cp /usr/bin/tailscale /opt/bin/tailscale
 RUN sudo cp /usr/sbin/tailscaled /opt/bin/tailscaled
