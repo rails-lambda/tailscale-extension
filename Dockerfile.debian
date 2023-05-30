@@ -1,0 +1,14 @@
+FROM debian:bullseye as builder
+RUN apt-get update && \
+    apt-get install -y curl sudo
+RUN sudo curl -fsSL https://tailscale.com/install.sh | sh
+
+RUN mkdir -p ./opt/bin ./opt/extensions
+COPY ./src/live-development-proxy.sh /opt/extensions/live-development-proxy.sh
+RUN sudo cp /usr/bin/tailscale /opt/bin/tailscale
+RUN sudo cp /usr/sbin/tailscaled /opt/bin/tailscaled
+
+FROM scratch
+LABEL org.opencontainers.image.source "https://github.com/rails-lambda/live-development"
+LABEL org.opencontainers.image.description "Live Lambda Development | Tailscale Proxy"
+COPY --from=builder /opt /opt
