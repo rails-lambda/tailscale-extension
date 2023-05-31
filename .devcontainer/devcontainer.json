@@ -1,5 +1,5 @@
 {
-  "name": "live-development",
+  "name": "tailscale-extension",
   "build": {
     "dockerfile": "Dockerfile",
     "context": "."
