@@ -1,5 +1,5 @@
 
-# Live Lambda Development | Tailscale Proxy
+# Tailscale Lambda Extension for Containers
 
 ## Architecture
 
@@ -45,7 +45,6 @@ flowchart TB
 ## Installation
 
 TODO: Call out need for `curl` to be installed.
-
 
 ```dockerfile
 FROM public.ecr.aws/lambda/nodejs:18
