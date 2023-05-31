@@ -36,7 +36,8 @@ EXTENSION_ID=$(grep -Fi Lambda-Extension-Identifier "$HEADERS" | tr -d '[:space:
 echo "[${LAMBDA_EXTENSION_NAME}] Registration response: ${RESPONSE} with EXTENSION_ID $(grep -Fi Lambda-Extension-Identifier "$HEADERS" | tr -d '[:space:]' | cut -d: -f2)"
 
 # Start the Tailscale process
-/opt/bin/tailscaled --tun=userspace-networking --socks5-server=localhost:1055 --socket=/tmp/tailscale.sock --state /tmp/tailscale &
+TS_HOSTNAME=${TS_HOSTNAME:-lambda}
+/opt/bin/tailscaled --tun=userspace-networking --socks5-server=localhost:1055 --socket=/tmp/tailscale.sock --state=/tmp/tailscale --hostname=$TS_HOSTNAME &
 until /opt/bin/tailscale --socket=/tmp/tailscale.sock up --authkey=$TS_KEY
 do
   sleep 0.1

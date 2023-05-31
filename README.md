@@ -17,6 +17,13 @@ COPY --from=ghcr.io/rails-lambda/tailscale-extension-amzn:1 /opt /opt
 
 ⚠️ Make sure `curl` is installed since the Tailscale Extension script will need it.
 
+### Environment Variables
+
+You will need to generate an [ephemeral key](https://login.tailscale.com/admin/settings/authkeys) within your Tailscale account. Note, this will expire and need updating depending on the time period you select. List of the environment variables include:
+
+- `TS_KEY` - Required. Your ephemeral key.
+- `TS_HOSTNAME` - Optional. The value of `--hostname` parameter. Default `lambda`.
+
 ### OSs & Architectures
 
 We publish multi-platform images for both `linux/amd64` and `linux/arm64/v8` and we also have Amazon Linux 2 and Debian/Ubuntu variants.
