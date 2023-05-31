@@ -7,7 +7,7 @@ set +x
 
 OWN_FILENAME="$(basename $0)"
 LAMBDA_EXTENSION_NAME="$OWN_FILENAME" # (external) extension name has to match the filename
-TMPFILE=/tmp/$OWN_FILENAME
+TMPFILE="/tmp/tailscale.data"
 
 # Graceful Shutdown
 _term() {
@@ -51,6 +51,7 @@ do
   curl -sS -L -XGET "http://${AWS_LAMBDA_RUNTIME_API}/2020-01-01/extension/event/next" --header "Lambda-Extension-Identifier: ${EXTENSION_ID}" > $TMPFILE &
   PID=$!
   forward_sigterm_and_wait
+  EVENT_DATA=$(<$TMPFILE)
   if [[ $EVENT_DATA == *"SHUTDOWN"* ]]; then
     echo "[extension: ${LAMBDA_EXTENSION_NAME}] Received SHUTDOWN event. Exiting."  1>&2;
     # Cleanly shut down the Tailscale process
