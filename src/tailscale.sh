@@ -37,8 +37,8 @@ echo "[${LAMBDA_EXTENSION_NAME}] Registration response: ${RESPONSE} with EXTENSI
 
 # Start the Tailscale process
 TS_HOSTNAME=${TS_HOSTNAME:-lambda}
-/opt/bin/tailscaled --tun=userspace-networking --socks5-server=localhost:1055 --socket=/tmp/tailscale.sock --state=/tmp/tailscale --hostname=$TS_HOSTNAME &
-until /opt/bin/tailscale --socket=/tmp/tailscale.sock up --authkey=$TS_KEY
+/opt/bin/tailscaled --tun=userspace-networking --socks5-server=localhost:1055 --socket=/tmp/tailscale.sock --state=/tmp/tailscale &
+until /opt/bin/tailscale --socket=/tmp/tailscale.sock up --authkey=$TS_KEY --hostname=$TS_HOSTNAME
 do
   sleep 0.1
 done
