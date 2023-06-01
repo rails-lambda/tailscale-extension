@@ -5,7 +5,7 @@
 set -euo pipefail
 set +x
 
-OWN_FILENAME="$(basename $0)"
+OWN_FILENAME="$(basename "$0")"
 LAMBDA_EXTENSION_NAME="$OWN_FILENAME" # (external) extension name has to match the filename
 TMPFILE="/tmp/tailscale.data"
 
@@ -30,15 +30,17 @@ echo "[${LAMBDA_EXTENSION_NAME}] Registering at http://${AWS_LAMBDA_RUNTIME_API}
 curl -sS -LD "$HEADERS" -XPOST "http://${AWS_LAMBDA_RUNTIME_API}/2020-01-01/extension/register" --header "Lambda-Extension-Name: ${LAMBDA_EXTENSION_NAME}" -d "{ \"events\": [\"SHUTDOWN\", \"INVOKE\"]}" > $TMPFILE
 
 RESPONSE=$(<$TMPFILE)
-HEADINFO=$(<$HEADERS)
 # Extract Extension ID from response headers
 EXTENSION_ID=$(grep -Fi Lambda-Extension-Identifier "$HEADERS" | tr -d '[:space:]' | cut -d: -f2)
 echo "[${LAMBDA_EXTENSION_NAME}] Registration response: ${RESPONSE} with EXTENSION_ID $(grep -Fi Lambda-Extension-Identifier "$HEADERS" | tr -d '[:space:]' | cut -d: -f2)"
 
 # Start the Tailscale process
 TS_HOSTNAME=${TS_HOSTNAME:-lambda}
-/opt/bin/tailscaled --tun=userspace-networking --socks5-server=localhost:1055 --socket=/tmp/tailscale.sock --state=/tmp/tailscale &
-until /opt/bin/tailscale --socket=/tmp/tailscale.sock up --authkey=$TS_KEY --hostname=$TS_HOSTNAME
+if [ -n "${AWS_LAMBDA_FUNCTION_VERSION:-}" ]; then
+  TS_HOSTNAME="${TS_HOSTNAME}-v${AWS_LAMBDA_FUNCTION_VERSION}"
+fi
+/opt/bin/tailscaled --tun=userspace-networking --socks5-server=localhost:1055 --socket=/tmp/tailscale.sock --state=/tmp/tailscale & sleep 2
+until /opt/bin/tailscale --socket=/tmp/tailscale.sock up --authkey="${TS_KEY}" --hostname="${TS_HOSTNAME}"
 do
   sleep 0.1
 done
