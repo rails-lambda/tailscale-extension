@@ -31,6 +31,8 @@ We publish multi-platform images for both `linux/amd64` and `linux/arm64/v8` and
 
 ## Example Usage
 
+[📚 Using Tailscale on Lambda for a Live Development Proxy](https://lamby.cloud/blog/tailscale-extension-for-lambda-containers)
+
 Once your Lambda function starts, you will have a [SOCKS5](https://en.wikipedia.org/wiki/SOCKS) proxy which can communicate with your Tailscale tailnet at `http://localhost:1055`. Here is an example of how to leverage that with Ruby's [socksify](https://github.com/astro/socksify-ruby) gem.
 
 ```ruby
